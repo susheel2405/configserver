@@ -1,29 +1,33 @@
+server:
+  port: 8888
+
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/student_dev_db?useSSL=false&serverTimezone=UTC
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 5
-      minimum-idle: 2
-      idle-timeout: 10000
-      connection-timeout: 20000
+  application:
+    name: democonfig
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+  cloud:
+    config:
+      server:
+        composite:
+          - type: git
+            uri: https://github.com/susheel2405/configserver.git
+            default-label: main
+            clone-on-start: true
+            search-paths: .
+          - type: vault
+            backend: secret
+            default-key: student-service
 
-logging:
-  level:
-    root: DEBUG
-    org.springframework: DEBUG
+    vault:
+      uri: http://127.0.0.1:8200
+      token: ${VAULT_TOKEN:root}
+      authentication: TOKEN
 
-app:
-  featureFlags:
-    enableSampleData: true
-    sendEmails: false
-  cors:
-    allowedOrigins:
-      - http://localhost:4200
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
+  endpoint:
+    health:
+      show-details: always
