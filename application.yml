@@ -1,48 +1,29 @@
 spring:
-  application:
-    name: student-service
-
   datasource:
-    url: jdbc:mysql://prod-db:3306/student_db?useSSL=true&verifyServerCertificate=true&requireSSL=true&serverTimezone=UTC
-    username: ${DB_USER}
-    password: ${DB_PASS}
+    url: jdbc:mysql://localhost:3306/student_dev_db?useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      idle-timeout: 300000
-      connection-timeout: 30000
+      maximum-pool-size: 5
+      minimum-idle: 2
+      idle-timeout: 10000
+      connection-timeout: 20000
 
   jpa:
     hibernate:
-      ddl-auto: none
-    show-sql: false
-
-server:
-  port: 8080
-  forward-headers-strategy: native
+      ddl-auto: update
+    show-sql: true
 
 logging:
   level:
-    root: WARN
-    org.springframework: WARN
-    org.springframework.boot: ERROR
-    org.hibernate: ERROR
-    org.apache: ERROR
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  endpoint:
-    health:
-      show-details: never
+    root: DEBUG
+    org.springframework: DEBUG
 
 app:
   featureFlags:
-    enableSampleData: false
-    sendEmails: true
+    enableSampleData: true
+    sendEmails: false
   cors:
     allowedOrigins:
-      - https://your-domain.com
+      - http://localhost:4200
